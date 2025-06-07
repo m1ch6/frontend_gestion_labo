@@ -1,26 +1,46 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "./hooks/redux";
+import AppRouter from "./router";
+import { getCurrentUser } from "./features/auth/services/authApi";
+import { loginSuccess } from "./store/slices/authSlice";
+import { CircularProgress, Box } from "@mui/material";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const dispatch = useAppDispatch();
+    const [loading, setLoading] = React.useState(true);
+    const token = localStorage.getItem("token");
+
+    useEffect(() => {
+        const loadUserProfile = async () => {
+            if (token) {
+                try {
+                    const user = await getCurrentUser();
+                    dispatch(loginSuccess({ user, token }));
+                } catch (error) {
+                    console.error("Failed to load user profile:", error);
+                    localStorage.removeItem("token");
+                }
+            }
+            setLoading(false);
+        };
+
+        loadUserProfile();
+    }, [dispatch, token]);
+
+    if (loading) {
+        return (
+            <Box
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                height="100vh"
+            >
+                <CircularProgress />
+            </Box>
+        );
+    }
+
+    return <AppRouter />;
 }
 
 export default App;
