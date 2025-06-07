@@ -4,7 +4,7 @@ import { login as loginApi } from '../../features/auth/services/authApi';
 import { LoginRequest } from '../../types';
 
 export const loginThunk = createAsyncThunk(
-  'auth/login',
+  '/login',
   async (payload: LoginRequest, { rejectWithValue }) => {
     try {
       return await loginApi(payload);
