@@ -1,5 +1,5 @@
-import { Routes, Route } from "react-router-dom";
-import EntityCrudPage from "../../../components/EntityCrudPage";
+import React from "react";
+import EntityCrudPage from "../../components/EntityCrudPage";
 
 const miniprojectFields = [
     { name: "titre", label: "Titre" },
@@ -10,12 +10,12 @@ const miniprojectFields = [
     { name: "commentaires", label: "Commentaires" },
 ];
 
-export default function MiniProjectPage() {
-    return (
-        <EntityCrudPage
-            entityName="miniprojets"
-            endpoint="/miniprojects"
-            fields={miniprojectFields}
-        />
-    );
-}
+const MiniprojectsPage: React.FC = () => (
+    <EntityCrudPage
+        entityName="miniprojets"
+        endpoint="/miniprojects"
+        fields={miniprojectFields}
+    />
+);
+
+export default MiniprojectsPage;
