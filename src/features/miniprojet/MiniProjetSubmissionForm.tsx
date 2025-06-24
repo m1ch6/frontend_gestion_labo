@@ -38,11 +38,13 @@ const MiniProjetSubmissionForm: React.FC = () => {
         setSuccess("");
         setError("");
         const data = new FormData();
-        data.append("titre", form.titre);
-        data.append("description", form.description);
-        if (form.file) data.append("file", form.file);
+        // Backend expects a JSON string in 'project' part
+        data.append(
+            "project",
+            JSON.stringify({ titre: form.titre, description: form.description })
+        );
+        if (form.file) data.append("files", form.file); // Backend expects 'files' as the file part
         try {
-            // Adjust the endpoint as needed
             await axios.post("/api/miniprojects", data, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
