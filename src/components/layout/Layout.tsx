@@ -13,6 +13,10 @@ import {
     Avatar,
     Menu,
     MenuItem,
+    FormControl,
+    Select,
+    InputLabel,
+    SelectChangeEvent,
 } from "@mui/material";
 import {
     Menu as MenuIcon,
@@ -33,9 +37,17 @@ import {
 
 const drawerWidth = 240;
 
+const backendOptions = [
+    { label: "Gestion des Besoins", url: "http://localhost:8080/api" },
+    { label: "TP", url: "http://localhost:8081/api" },
+];
+
 export default function Layout() {
     const [mobileOpen, setMobileOpen] = useState(false);
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const [selectedBackend, setSelectedBackend] = useState(
+        localStorage.getItem("apiBaseUrl") || backendOptions[0].url
+    );
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const { user } = useAppSelector((state) => state.auth);
@@ -60,6 +72,12 @@ export default function Layout() {
         // Logout
         dispatch(logout());
         navigate("/login");
+    };
+    const handleBackendChange = (event: SelectChangeEvent<string>) => {
+        const url = event.target.value;
+        setSelectedBackend(url);
+        localStorage.setItem("apiBaseUrl", url);
+        window.location.reload(); // reload to apply new backend
     };
 
     const drawer = (
@@ -139,6 +157,7 @@ export default function Layout() {
                 sx={{
                     width: { sm: `calc(100% - ${drawerWidth}px)` },
                     ml: { sm: `${drawerWidth}px` },
+                    zIndex: (theme) => theme.zIndex.drawer + 1,
                 }}
             >
                 <Toolbar>
@@ -158,6 +177,25 @@ export default function Layout() {
                     >
                         Système de Gestion des Besoins Estudiantins
                     </Typography>
+                    <Box sx={{ flexGrow: 1 }} />
+                    <FormControl size="small" sx={{ minWidth: 180, mr: 2 }}>
+                        <InputLabel id="backend-select-label">
+                            Backend
+                        </InputLabel>
+                        <Select
+                            labelId="backend-select-label"
+                            id="backend-select"
+                            value={selectedBackend}
+                            label="Backend"
+                            onChange={handleBackendChange}
+                        >
+                            {backendOptions.map((option) => (
+                                <MenuItem key={option.url} value={option.url}>
+                                    {option.label}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
                     {user && (
                         <>
                             <IconButton

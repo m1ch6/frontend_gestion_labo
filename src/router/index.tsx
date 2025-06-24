@@ -14,6 +14,8 @@ import MemoiresPage from "../features/memoires/MemoiresPage";
 import DocumentsPage from "../features/documents/DocumentsPage";
 import NotificationsPage from "../features/notifications/NotificationsPage";
 import SoutenancesPage from "../features/soutenances/SoutenancesPage";
+import MiniProjetSubmissionSequencePage from "../pages/MiniProjetSubmissionSequencePage";
+import PlanifierSeancesTPPage from "../pages/PlanifierSeancesTPPage";
 
 export default function AppRouter() {
     return (
@@ -42,6 +44,14 @@ export default function AppRouter() {
                         element={<NotificationsPage />}
                     />
                     <Route path="soutenances" element={<SoutenancesPage />} />
+                    <Route
+                        path="mini-projet-sequence"
+                        element={<MiniProjetSubmissionSequencePage />}
+                    />
+                    <Route
+                        path="planifier-seances-tp"
+                        element={<PlanifierSeancesTPPage />}
+                    />
                     {/* CRUD routes for admin/advanced users, not in sidebar */}
                     <Route
                         path="memoires-crud"
